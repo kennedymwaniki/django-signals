@@ -8,7 +8,6 @@ from .models import Profile
 # instance- instance of the model that sent the signal or the user that was created
 # created- boolean value that checks if the user was created or not
 # kwargs- keyword arguments
-
 # receiver- receives the signal and performs the action
 # sender- the model that sends the signal
 # it is fired after the user is saved, it creates a profile for the user, the profile is created with the user as the instance
@@ -17,3 +16,11 @@ def build_profile(sender, instance, created, **kwargs):
     if created:
         # creates a profile for the user
         Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+
+# ! in the app.py we add configuration for the signals
